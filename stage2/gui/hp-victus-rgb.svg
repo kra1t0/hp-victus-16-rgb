@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Application icon for hp-victus-rgb. A stylized laptop keyboard with an RGB
+  gradient strip along the bottom edge, representing the controllable backlight.
+  Single scalable SVG placed under hicolor/scalable/apps/; the desktop environment
+  rasterizes it at the needed size, so one file covers all standard sizes.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="128" height="128" viewBox="0 0 128 128"
+     role="img" aria-label="HP Victus RGB">
+  <title>HP Victus RGB</title>
+
+  <!-- Rounded keyboard body -->
+  <rect x="14" y="22" width="100" height="74" rx="10" ry="10"
+        fill="#2b2d31" stroke="#1a1b1e" stroke-width="2"/>
+
+  <!-- Key grid (5 rows x 9 cols, simplified) -->
+  <g fill="#585b62" stroke="#1a1b1e" stroke-width="1">
+    <!-- row 1 -->
+    <rect x="22" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="33" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="44" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="55" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="66" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="77" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="88" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="99" y="30" width="8" height="8" rx="1.5"/>
+    <!-- row 2 -->
+    <rect x="22" y="42" width="8" height="8" rx="1.5"/>
+    <rect x="33" y="42" width="8" height="8" rx="1.5"/>
+    <rect x="44" y="42" width="8" height="8" rx="1.5"/>
+    <rect x="55" y="42" width="8" height="8" rx="1.5"/>
+    <rect x="66" y="42" width="8" height="8" rx="1.5"/>
+    <rect x="77" y="42" width="8" height="8" rx="1.5"/>
+    <rect x="88" y="42" width="8" height="8" rx="1.5"/>
+    <rect x="99" y="42" width="8" height="8" rx="1.5"/>
+    <!-- row 3 -->
+    <rect x="22" y="54" width="8" height="8" rx="1.5"/>
+    <rect x="33" y="54" width="8" height="8" rx="1.5"/>
+    <rect x="44" y="54" width="8" height="8" rx="1.5"/>
+    <rect x="55" y="54" width="8" height="8" rx="1.5"/>
+    <rect x="66" y="54" width="8" height="8" rx="1.5"/>
+    <rect x="77" y="54" width="8" height="8" rx="1.5"/>
+    <rect x="88" y="54" width="8" height="8" rx="1.5"/>
+    <rect x="99" y="54" width="8" height="8" rx="1.5"/>
+    <!-- row 4 (spacebar row) -->
+    <rect x="22" y="66" width="8" height="8" rx="1.5"/>
+    <rect x="33" y="66" width="85" height="8" rx="3"/>
+  </g>
+
+  <!-- RGB backlight strip along the bottom of the keyboard, glowing -->
+  <defs>
+    <linearGradient id="rgb" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0.00" stop-color="#ff3b3b"/>
+      <stop offset="0.20" stop-color="#ff9f1c"/>
+      <stop offset="0.40" stop-color="#ffe14d"/>
+      <stop offset="0.55" stop-color="#3bd16f"/>
+      <stop offset="0.75" stop-color="#2ec4ff"/>
+      <stop offset="1.00" stop-color="#a64bff"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+  <!-- soft glow under the strip -->
+  <rect x="14" y="82" width="100" height="14" rx="6" ry="6"
+        fill="url(#rgb)" filter="url(#glow)" opacity="0.55"/>
+  <!-- crisp strip -->
+  <rect x="18" y="84" width="92" height="6" rx="3" ry="3" fill="url(#rgb)"/>
+</svg>

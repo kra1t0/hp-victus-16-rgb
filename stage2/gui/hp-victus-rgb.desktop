@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=HP Victus RGB
+GenericName=Keyboard RGB Control
+Comment=Set the keyboard color and brightness of an HP Victus laptop
+Comment[zh]=设置 HP Victus 笔记本键盘的颜色和亮度
+Exec=hp-victus-rgb-gui
+Icon=hp-victus-rgb
+Terminal=false
+Categories=Utility;Settings;HardwareSettings;
+Keywords=rgb;keyboard;victus;hp;light;
+StartupNotify=true
