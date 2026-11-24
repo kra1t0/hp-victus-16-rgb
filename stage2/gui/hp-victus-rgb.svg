@@ -1,54 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Application icon for hp-victus-rgb. A stylized laptop keyboard with an RGB
-  gradient strip along the bottom edge, representing the controllable backlight.
-  Single scalable SVG placed under hicolor/scalable/apps/; the desktop environment
-  rasterizes it at the needed size, so one file covers all standard sizes.
+  Application icon for hp-victus-rgb.
+
+  Design notes:
+  - Solid rounded-square background (no transparency) so the icon is visible
+    on both dark and light GNOME app grids. A transparent background makes
+    a dark icon invisible on the default dark grid.
+  - No SVG <filter> elements (feGaussianBlur etc.): GNOME's librsvg icon
+    pipeline refuses to render some filters in the icon context, leaving
+    a blank tile. All "glow" is faked with semi-transparent overlay rects.
+  - Single scalable SVG placed under hicolor/scalable/apps/; the desktop
+    environment rasterizes it at the needed size, so one file covers all
+    standard sizes.
 -->
 <svg xmlns="http://www.w3.org/2000/svg"
      width="128" height="128" viewBox="0 0 128 128"
      role="img" aria-label="HP Victus RGB">
   <title>HP Victus RGB</title>
 
-  <!-- Rounded keyboard body -->
-  <rect x="14" y="22" width="100" height="74" rx="10" ry="10"
-        fill="#2b2d31" stroke="#1a1b1e" stroke-width="2"/>
+  <!-- Rounded tile background: neutral slate, visible on any theme -->
+  <rect x="6" y="6" width="116" height="116" rx="26" ry="26"
+        fill="#3a3f4b"/>
 
-  <!-- Key grid (5 rows x 9 cols, simplified) -->
-  <g fill="#585b62" stroke="#1a1b1e" stroke-width="1">
+  <!-- Soft inner highlight on top edge (fake depth, no filter) -->
+  <rect x="14" y="10" width="100" height="6" rx="3" ry="3"
+        fill="#5b6270" opacity="0.7"/>
+
+  <!-- Keyboard body -->
+  <rect x="22" y="34" width="84" height="58" rx="8" ry="8"
+        fill="#1c1e22"/>
+
+  <!-- Keys (3 rows visible, simplified) -->
+  <g fill="#585b62">
     <!-- row 1 -->
-    <rect x="22" y="30" width="8" height="8" rx="1.5"/>
-    <rect x="33" y="30" width="8" height="8" rx="1.5"/>
-    <rect x="44" y="30" width="8" height="8" rx="1.5"/>
-    <rect x="55" y="30" width="8" height="8" rx="1.5"/>
-    <rect x="66" y="30" width="8" height="8" rx="1.5"/>
-    <rect x="77" y="30" width="8" height="8" rx="1.5"/>
-    <rect x="88" y="30" width="8" height="8" rx="1.5"/>
-    <rect x="99" y="30" width="8" height="8" rx="1.5"/>
+    <rect x="28" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="40" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="52" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="64" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="76" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="88" y="40" width="9" height="9" rx="1.5"/>
     <!-- row 2 -->
-    <rect x="22" y="42" width="8" height="8" rx="1.5"/>
-    <rect x="33" y="42" width="8" height="8" rx="1.5"/>
-    <rect x="44" y="42" width="8" height="8" rx="1.5"/>
-    <rect x="55" y="42" width="8" height="8" rx="1.5"/>
-    <rect x="66" y="42" width="8" height="8" rx="1.5"/>
-    <rect x="77" y="42" width="8" height="8" rx="1.5"/>
-    <rect x="88" y="42" width="8" height="8" rx="1.5"/>
-    <rect x="99" y="42" width="8" height="8" rx="1.5"/>
-    <!-- row 3 -->
-    <rect x="22" y="54" width="8" height="8" rx="1.5"/>
-    <rect x="33" y="54" width="8" height="8" rx="1.5"/>
-    <rect x="44" y="54" width="8" height="8" rx="1.5"/>
-    <rect x="55" y="54" width="8" height="8" rx="1.5"/>
-    <rect x="66" y="54" width="8" height="8" rx="1.5"/>
-    <rect x="77" y="54" width="8" height="8" rx="1.5"/>
-    <rect x="88" y="54" width="8" height="8" rx="1.5"/>
-    <rect x="99" y="54" width="8" height="8" rx="1.5"/>
-    <!-- row 4 (spacebar row) -->
-    <rect x="22" y="66" width="8" height="8" rx="1.5"/>
-    <rect x="33" y="66" width="85" height="8" rx="3"/>
+    <rect x="28" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="40" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="52" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="64" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="76" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="88" y="52" width="9" height="9" rx="1.5"/>
+    <!-- row 3: spacebar -->
+    <rect x="28" y="64" width="69" height="9" rx="4.5"/>
   </g>
 
-  <!-- RGB backlight strip along the bottom of the keyboard, glowing -->
+  <!-- Faint RGB glow behind the strip (layered rects, no filter) -->
+  <rect x="26" y="78" width="76" height="14" rx="5" ry="5"
+        fill="#ff3b3b" opacity="0.25"/>
+  <rect x="34" y="78" width="60" height="14" rx="5" ry="5"
+        fill="#3bd16f" opacity="0.25"/>
+  <rect x="42" y="78" width="44" height="14" rx="5" ry="5"
+        fill="#2ec4ff" opacity="0.25"/>
+
+  <!-- Crisp RGB strip: full-saturation gradient, the icon's focal point -->
   <defs>
     <linearGradient id="rgb" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0.00" stop-color="#ff3b3b"/>
@@ -58,13 +68,6 @@
       <stop offset="0.75" stop-color="#2ec4ff"/>
       <stop offset="1.00" stop-color="#a64bff"/>
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3"/>
-    </filter>
   </defs>
-  <!-- soft glow under the strip -->
-  <rect x="14" y="82" width="100" height="14" rx="6" ry="6"
-        fill="url(#rgb)" filter="url(#glow)" opacity="0.55"/>
-  <!-- crisp strip -->
-  <rect x="18" y="84" width="92" height="6" rx="3" ry="3" fill="url(#rgb)"/>
+  <rect x="28" y="82" width="72" height="6" rx="3" ry="3" fill="url(#rgb)"/>
 </svg>

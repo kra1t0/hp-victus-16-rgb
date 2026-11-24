@@ -199,8 +199,13 @@ class ColorWheel(Gtk.Widget):
 
     def do_snapshot(self, snapshot):  # type: ignore[override]
         width = height = WHEEL_SIZE
-        surf = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
-        cr = cairo.Context(surf)
+        # Use GTK4's direct cairo drawing API instead of an offscreen
+        # ImageSurface -> Gdk.Texture roundtrip, which can render blank in
+        # some GTK4 versions when the surface has alpha.
+        rect = Graphene.Rect.alloc()
+        rect.init(0, 0, width, height)
+        cr = snapshot.append_cairo(rect)
+
         cx = width / 2.0
         cy = height / 2.0
         outer = min(width, height) / 2.0 - 2
@@ -246,12 +251,6 @@ class ColorWheel(Gtk.Widget):
         cr.set_line_width(1.5)
         cr.arc(px, py, 9, 0, 2 * math.pi)
         cr.stroke()
-
-        # Hand the cairo surface to GTK4's snapshot.
-        texture = Gdk.Texture.new_for_surface(surf)
-        rect = Graphene.Rect.alloc()
-        rect.init(0, 0, width, height)
-        snapshot.append_texture(texture, rect)
 
 
 # ----------------------------------------------------------------------
