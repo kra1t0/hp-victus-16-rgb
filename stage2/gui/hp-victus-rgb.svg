@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Application icon for hp-victus-rgb.
+
+  Design notes:
+  - Solid rounded-square background (no transparency) so the icon is visible
+    on both dark and light GNOME app grids. A transparent background makes
+    a dark icon invisible on the default dark grid.
+  - No SVG <filter> elements (feGaussianBlur etc.): GNOME's librsvg icon
+    pipeline refuses to render some filters in the icon context, leaving
+    a blank tile. All "glow" is faked with semi-transparent overlay rects.
+  - Single scalable SVG placed under hicolor/scalable/apps/; the desktop
+    environment rasterizes it at the needed size, so one file covers all
+    standard sizes.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="128" height="128" viewBox="0 0 128 128"
+     role="img" aria-label="HP Victus RGB">
+  <title>HP Victus RGB</title>
+
+  <!-- Rounded tile background: neutral slate, visible on any theme -->
+  <rect x="6" y="6" width="116" height="116" rx="26" ry="26"
+        fill="#3a3f4b"/>
+
+  <!-- Soft inner highlight on top edge (fake depth, no filter) -->
+  <rect x="14" y="10" width="100" height="6" rx="3" ry="3"
+        fill="#5b6270" opacity="0.7"/>
+
+  <!-- Keyboard body -->
+  <rect x="22" y="34" width="84" height="58" rx="8" ry="8"
+        fill="#1c1e22"/>
+
+  <!-- Keys (3 rows visible, simplified) -->
+  <g fill="#585b62">
+    <!-- row 1 -->
+    <rect x="28" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="40" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="52" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="64" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="76" y="40" width="9" height="9" rx="1.5"/>
+    <rect x="88" y="40" width="9" height="9" rx="1.5"/>
+    <!-- row 2 -->
+    <rect x="28" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="40" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="52" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="64" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="76" y="52" width="9" height="9" rx="1.5"/>
+    <rect x="88" y="52" width="9" height="9" rx="1.5"/>
+    <!-- row 3: spacebar -->
+    <rect x="28" y="64" width="69" height="9" rx="4.5"/>
+  </g>
+
+  <!-- Faint RGB glow behind the strip (layered rects, no filter) -->
+  <rect x="26" y="78" width="76" height="14" rx="5" ry="5"
+        fill="#ff3b3b" opacity="0.25"/>
+  <rect x="34" y="78" width="60" height="14" rx="5" ry="5"
+        fill="#3bd16f" opacity="0.25"/>
+  <rect x="42" y="78" width="44" height="14" rx="5" ry="5"
+        fill="#2ec4ff" opacity="0.25"/>
+
+  <!-- Crisp RGB strip: full-saturation gradient, the icon's focal point -->
+  <defs>
+    <linearGradient id="rgb" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0.00" stop-color="#ff3b3b"/>
+      <stop offset="0.20" stop-color="#ff9f1c"/>
+      <stop offset="0.40" stop-color="#ffe14d"/>
+      <stop offset="0.55" stop-color="#3bd16f"/>
+      <stop offset="0.75" stop-color="#2ec4ff"/>
+      <stop offset="1.00" stop-color="#a64bff"/>
+    </linearGradient>
+  </defs>
+  <rect x="28" y="82" width="72" height="6" rx="3" ry="3" fill="url(#rgb)"/>
+</svg>

@@ -1,0 +1,61 @@
+# Prerequisites & Dependency files
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Libraries & Shared objects
+*.lib
+*.a
+*.la
+*.lo
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Common build folders
+build/
+bin/
+obj/
+
+# --- makepkg / Arch package artifacts ---
+pkg/
+src/
+*.pkg.tar.*
+*.src.tar.*
+
+# --- DKMS build artifacts (shouldn't be committed) ---
+*.ko.cmd
+*.mod
+*.mod.c
+*.order
+modules.order
+Module.symvers
+.module-common.o
+
+# --- kernel module build byproducts not caught above ---
+.tmp_versions/
+.*.cmd
+
+# --- editor / OS junk ---
+.*.swp
+.DS_Store
+*~

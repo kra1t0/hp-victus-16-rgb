@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = hp-victus-rgb
+
+[Action]
+Description = Register and build hp_victus_rgb kernel module via DKMS
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/hp-victus-rgb-dkms.sh
+NeedsTargets

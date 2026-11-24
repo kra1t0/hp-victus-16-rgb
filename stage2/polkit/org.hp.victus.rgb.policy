@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Polkit policy for the hp-victus-rgb CLI helper.
+
+  The GUI runs as the normal user. Writing to
+  /sys/devices/platform/hp-victus-rgb/{color,brightness} requires root, so the
+  GUI invokes `pkexec hp-victus-rgb ...`. This policy lets active local
+  desktop users authenticate (once, non-persistently) to run that action,
+  rather than prompting for every color change.
+
+  Authentication is required but kept in-memory only for the session; the
+  `auth_admin_keep` lets it stick briefly so dragging the color wheel is not
+  interrupted by repeated prompts. Tighten to `auth_admin` if you prefer to
+  re-auth on every write.
+-->
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+
+<policyconfig>
+  <vendor>hp-victus-16-rgb</vendor>
+  <vendor_url>https://github.com/kra1t0/hp-victus-16-rgb</vendor_url>
+
+  <action id="org.hp.victus.rgb.write">
+    <description>Set the HP Victus keyboard RGB color and brightness</description>
+    <message>Authentication is required to change the keyboard RGB</message>
+    <icon_name>preferences-color-symbolic</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/hp-victus-rgb</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+</policyconfig>

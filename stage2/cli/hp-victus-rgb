@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+"""
+hp-victus-rgb - command line interface for the hp_victus_rgb kernel module.
+
+Talks to the sysfs interface exposed by the Stage 2 kernel module:
+
+    /sys/devices/platform/hp-victus-rgb/color        (RRGGBB hex)
+    /sys/devices/platform/hp-victus-rgb/brightness   (0-100 percent)
+
+Subcommands:
+    set <color> [--brightness N]   write a color (and optional brightness)
+    brightness <0-100>             change brightness only, keep current hue
+    get                           print current color + brightness
+    watch                         poll and print changes (debug)
+
+Examples:
+    sudo hp-victus-rgb set "#ff8800"
+    sudo hp-victus-rgb set ff8800 --brightness 80
+    hp-victus-rgb get
+
+The module must be loaded (modprobe hp_victus_rgb) for any of this to work.
+Writing to color/brightness requires root because the kernel attributes are
+created with default 0644 perms owned by root.
+"""
+
+import argparse
+import os
+import sys
+import time
+
+SYSFS = "/sys/devices/platform/hp-victus-rgb"
+COLOR_PATH = os.path.join(SYSFS, "color")
+BRIGHTNESS_PATH = os.path.join(SYSFS, "brightness")
+
+
+def _die(msg: str) -> "NoReturn":
+    sys.stderr.write(f"hp-victus-rgb: {msg}\n")
+    sys.exit(1)
+
+
+def _ensure_module() -> None:
+    if not os.path.isdir(SYSFS):
+        _die(
+            "sysfs path not found: %s\n"
+            "Is the hp_victus_rgb module loaded? Try:  sudo modprobe hp_victus_rgb"
+            % SYSFS
+        )
+
+
+def _normalize_color(value: str) -> str:
+    v = value.lstrip("#").strip().lower()
+    if len(v) != 6 or any(c not in "0123456789abcdef" for c in v):
+        _die(f"invalid color '{value}' (expected RRGGBB hex, e.g. ff8800)")
+    return v
+
+
+def _read(path: str) -> str:
+    with open(path, "r") as f:
+        return f.read().strip()
+
+
+def _write(path: str, value: str) -> None:
+    try:
+        with open(path, "w") as f:
+            f.write(value + "\n")
+    except PermissionError:
+        _die("permission denied writing %s (run with sudo)" % path)
+    except OSError as e:
+        _die(f"write to {path} failed: {e}")
+
+
+def cmd_set(args: argparse.Namespace) -> int:
+    _ensure_module()
+    color = _normalize_color(args.color)
+    _write(COLOR_PATH, color)
+    if args.brightness is not None:
+        if not 0 <= args.brightness <= 100:
+            _die("brightness must be 0-100")
+        _write(BRIGHTNESS_PATH, str(args.brightness))
+    print(f"set: color #{color}  brightness {_read(BRIGHTNESS_PATH)}%")
+    return 0
+
+
+def cmd_brightness(args: argparse.Namespace) -> int:
+    _ensure_module()
+    if not 0 <= args.value <= 100:
+        _die("brightness must be 0-100")
+    _write(BRIGHTNESS_PATH, str(args.value))
+    print(f"brightness: {_read(BRIGHTNESS_PATH)}%  color #{_read(COLOR_PATH)}")
+    return 0
+
+
+def cmd_get(args: argparse.Namespace) -> int:
+    _ensure_module()
+    color = _read(COLOR_PATH)
+    bright = _read(BRIGHTNESS_PATH)
+    print(f"color:     #{color}")
+    print(f"brightness: {bright}%")
+    # also a one-line form useful for scripts / waybar
+    print(f"#{color} {bright}%")
+    return 0
+
+
+def cmd_watch(args: argparse.Namespace) -> int:
+    _ensure_module()
+    last = None
+    print("polling every 0.5s, Ctrl-C to stop")
+    try:
+        while True:
+            state = (_read(COLOR_PATH), _read(BRIGHTNESS_PATH))
+            if state != last:
+                print(f"#{state[0]} {state[1]}%")
+                last = state
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        pass
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(
+        prog="hp-victus-rgb",
+        description="Control the HP Victus keyboard RGB via the hp_victus_rgb kernel module.",
+    )
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    s = sub.add_parser("set", help="set color and optionally brightness")
+    s.add_argument("color", help="color as RRGGBB or #RRGGBB hex, e.g. ff8800")
+    s.add_argument("--brightness", "-b", type=int, default=None,
+                   help="optional brightness 0-100")
+    s.set_defaults(func=cmd_set)
+
+    b = sub.add_parser("brightness", help="change brightness, keep current hue")
+    b.add_argument("value", type=int, help="0-100 percent")
+    b.set_defaults(func=cmd_brightness)
+
+    g = sub.add_parser("get", help="print current color and brightness")
+    g.set_defaults(func=cmd_get)
+
+    w = sub.add_parser("watch", help="poll sysfs and print changes")
+    w.set_defaults(func=cmd_watch)
+    return p
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
